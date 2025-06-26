@@ -4,8 +4,7 @@ on:
   push:
     paths:
       - 'docs/*.puml'
-  workflow_dispatch:
-
+  workflow_dispatch:  # Permite ejecución manual desde GitHub
 
 jobs:
   generate-diagram:
@@ -15,16 +14,20 @@ jobs:
       - name: Clonar el repositorio
         uses: actions/checkout@v3
 
-      - name: Instalar PlantUML y Java
+      - name: Instalar Java y Graphviz
         run: |
           sudo apt update
-          sudo apt install -y plantuml
+          sudo apt install -y openjdk-17-jre graphviz curl
+
+      - name: Descargar PlantUML (última versión)
+        run: |
+          curl -L -o plantuml.jar https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
 
       - name: Crear carpeta de salida
         run: mkdir -p output
 
       - name: Generar imagen desde PlantUML
-        run: plantuml -tpng docs/sistema.puml -o ../output
+        run: java -jar plantuml.jar -tpng docs/sistema.puml -o ../output
 
       - name: Subir imagen como artefacto del pipeline
         uses: actions/upload-artifact@v4
