@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Clonar el repositorio
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Instalar PlantUML y Java
         run: |
@@ -25,7 +25,7 @@ jobs:
         run: plantuml -tpng docs/sistema.puml -o ../output
 
       - name: Subir imagen como artefacto del pipeline
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: diagrama-generado
           path: output/sistema.png
