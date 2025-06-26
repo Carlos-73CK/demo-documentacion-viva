@@ -1,0 +1,31 @@
+name: Generar diagramas PlantUML
+
+on:
+  push:
+    paths:
+      - 'docs/*.puml'
+
+jobs:
+  generate-diagram:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v3
+
+      - name: Instalar PlantUML y Java
+        run: |
+          sudo apt update
+          sudo apt install -y plantuml
+
+      - name: Crear carpeta de salida
+        run: mkdir -p output
+
+      - name: Generar imagen desde PlantUML
+        run: plantuml -tpng docs/sistema.puml -o ../output
+
+      - name: Subir imagen como artefacto del pipeline
+        uses: actions/upload-artifact@v3
+        with:
+          name: diagrama-generado
+          path: output/sistema.png

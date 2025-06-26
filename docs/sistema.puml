@@ -1,0 +1,19 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title "Diagrama de Contenedores - Sistema de E-Commerce"
+
+Person(user, "Cliente", "Usuario que compra productos.")
+System_Boundary(ecommerce, "Plataforma E-Commerce") {
+    Container(spa, "Aplicación Web (SPA)", "React.js", "Provee la interfaz de usuario.")
+    Container(api, "API Gateway", "Node.js", "Recibe todas las peticiones de los clientes.")
+    Container(servicio_productos, "Microservicio de Productos", "Java", "Gestiona el catálogo de productos.")
+    ContainerDb(db, "Base de Datos", "PostgreSQL", "Almacena datos de usuarios, productos y pedidos.")
+}
+
+user --> spa: "Usa la web [HTTPS]"
+spa --> api: "Llamadas API [JSON/HTTPS]"
+api --> servicio_productos: "Consulta productos"
+api --> db: "Autentica usuarios"
+servicio_productos --> db: "Lee/Escribe"
+@enduml
