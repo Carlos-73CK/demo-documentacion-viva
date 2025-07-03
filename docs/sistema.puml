@@ -1,15 +1,18 @@
 @startuml
-!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
-title "C1 - Diagrama de Contexto: Sistema E-Commerce"
+title "C3 - Diagrama de Componentes: API Gateway"
 
-Person(cliente, "Cliente", "Usuario que compra productos.")
-System(ecommerce, "Sistema de E-Commerce", "Permite compras en línea.")
-System(crm, "CRM", "Atención al cliente")
-System(mail, "Servicio de Correos", "Envía confirmaciones y notificaciones.")
+Container_Boundary(api, "API Gateway") {
+    Component(auth, "AuthController", "Node.js", "Gestiona autenticación")
+    Component(router, "Enrutador de Peticiones", "Express.js", "Redirige tráfico")
+    Component(logger, "Middleware de Logging", "Node.js", "Registra actividad")
+}
 
-cliente --> ecommerce : "Compra productos"
-ecommerce --> crm : "Envía datos de soporte"
-ecommerce --> mail : "Notificaciones y confirmaciones"
+Person(cliente, "Cliente", "Usuario externo")
+
+cliente --> auth : "Envía credenciales"
+auth --> router : "Redirige peticiones"
+router --> logger : "Registra tráfico"
 
 @enduml
