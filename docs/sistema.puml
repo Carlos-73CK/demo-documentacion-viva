@@ -1,64 +1,15 @@
 @startuml
-!define C4P https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master
-!includeurl C4P/C4_Context.puml
-!includeurl C4P/C4_Container.puml
-!includeurl C4P/C4_Component.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
-title "Sistema E-Commerce - Modelo C4 Completo"
-
-' -------------------
-' C1 - Diagrama de Contexto
-' -------------------
-
-LAYOUT_WITH_LEGEND()
+title "C1 - Diagrama de Contexto: Sistema E-Commerce"
 
 Person(cliente, "Cliente", "Usuario que compra productos.")
 System(ecommerce, "Sistema de E-Commerce", "Permite compras en línea.")
-System(crm, "CRM", "Sistema externo de atención al cliente.")
-System(mail, "Servicio de Correos", "Envía notificaciones.")
+System(crm, "CRM", "Atención al cliente")
+System(mail, "Servicio de Correos", "Envía confirmaciones y notificaciones.")
 
 cliente --> ecommerce : "Compra productos"
 ecommerce --> crm : "Envía datos de soporte"
-ecommerce --> mail : "Envía confirmaciones"
-
-' Espacio visual
-'====================================================
-' C2 - Diagrama de Contenedores
-'====================================================
-
-System_Boundary(ecommerce_boundary, "Plataforma E-Commerce") {
-    Container(spa, "Aplicación Web (SPA)", "React.js", "Provee la interfaz de usuario.")
-    Container(api, "API Gateway", "Node.js", "Recibe todas las peticiones de los clientes.")
-    Container(servicio_productos, "Microservicio de Productos", "Java", "Gestiona el catálogo de productos.")
-    Container(servicio_pagos, "Microservicio de Pagos", "Python", "Procesa pagos y transacciones.")
-    ContainerDb(db, "Base de Datos", "PostgreSQL", "Almacena usuarios, productos y pedidos.")
-}
-
-cliente --> spa : "Usa la web [HTTPS]"
-spa --> api : "Llamadas API [JSON]"
-api --> servicio_productos : "Consulta productos"
-api --> servicio_pagos : "Procesa pagos"
-api --> db : "Autentica usuarios"
-servicio_productos --> db : "Lee/Escribe productos"
-servicio_pagos --> db : "Lee/Escribe transacciones"
-
-' Espacio visual
-'====================================================
-' C3 - Diagrama de Componentes dentro de API Gateway
-'====================================================
-
-Container_Boundary(api_c, "API Gateway") {
-    Component(auth, "AuthController", "Node.js", "Gestiona la autenticación de usuarios.")
-    Component(router, "Router", "Express.js", "Enruta peticiones a microservicios.")
-    Component(logger, "Middleware de Logging", "Node.js", "Registra peticiones y respuestas.")
-}
-
-cliente --> auth : "Envía credenciales"
-auth --> router : "Valida y enruta"
-router --> servicio_productos : "Redirige consulta de productos"
-router --> servicio_pagos : "Redirige pago"
-router --> db : "Consulta autenticación"
-auth --> logger : "Registra inicio de sesión"
-router --> logger : "Registra actividad"
+ecommerce --> mail : "Notificaciones y confirmaciones"
 
 @enduml
