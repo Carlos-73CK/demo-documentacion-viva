@@ -1,18 +1,23 @@
 @startuml
-!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+title "C4 - Diagrama de Código: AuthController"
 
-title "C3 - Diagrama de Componentes: API Gateway"
-
-Container_Boundary(api, "API Gateway") {
-    Component(auth, "AuthController", "Node.js", "Gestiona autenticación")
-    Component(router, "Enrutador de Peticiones", "Express.js", "Redirige tráfico")
-    Component(logger, "Middleware de Logging", "Node.js", "Registra actividad")
+class AuthController {
+    +login()
+    +logout()
+    -validateToken()
 }
 
-Person(cliente, "Cliente", "Usuario externo")
+class AuthService {
+    +generateToken()
+    +verifyCredentials()
+}
 
-cliente --> auth : "Envía credenciales"
-auth --> router : "Redirige peticiones"
-router --> logger : "Registra tráfico"
+class UserRepository {
+    +findByEmail()
+    +save()
+}
+
+AuthController --> AuthService : usa
+AuthService --> UserRepository : consulta
 
 @enduml
