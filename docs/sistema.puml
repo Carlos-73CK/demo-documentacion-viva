@@ -3,7 +3,6 @@ title "C4 - Diagrama de Código: AuthController"
 
 class AuthController {
     +login()
-    +logout()
     -validateToken()
 }
 
@@ -17,7 +16,7 @@ class UserRepository {
     +save()
 }
 
-AuthController --> AuthService : usa
+AuthController --> AuthService : usuarios 
 AuthService --> UserRepository : consulta
 
 @enduml
